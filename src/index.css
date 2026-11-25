@@ -1,1 +1,20 @@
-@import "tailwindcss"
+@import "tailwindcss";
+
+@theme {
+    --color-navy: #1D4257;
+    --color-paper: #F5F3EC;
+    --color-highlight: #F2C14E;
+    --color-ink-muted: #45535C;
+    --color-ink: #1A2B36;
+    --color-subtitle: #C9D6DD;
+    --color-region-Europe: #2F4F8F;
+    --color-region-Asia: #A2432C;
+    --color-region-Africa: #7A5200;
+    --color-region-Americas: #23674A;
+    --color-region-Oceania: #1F6C78;
+    --color-region-Antarctic: #4F5F6B;
+}
+
+body {
+    background-color: var(--color-navy);
+}

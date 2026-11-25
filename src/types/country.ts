@@ -6,7 +6,7 @@ export type Country = {
     capitals:{
         name: string;
     }[],
-    flag:{
+    flag?:{
         url_svg: string;
     },
     region: string;
