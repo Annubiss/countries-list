@@ -1,11 +1,13 @@
 import { useEffect } from 'react'
 import './App.css'
-import { fetchAllCountries } from './api/countries'
+import { fetchAllCountries, getCountries } from './api/countries'
 
 function App() {
 
   useEffect(() => {
-    console.log(fetchAllCountries())
+    getCountries()
+    console.log(getCountries())
+    
   }, [])
 
   return (
