@@ -8,18 +8,45 @@ import { PagesButton } from './components/PagesButton'
 function App() {
   const [countries, setCountries] = useState<Country[]>([])
   const [currentPage, setCurrentPage] = useState<number>(1)
+  const [isLoading, setIsLoading] = useState<Boolean>(true)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
   const pagesNumber = Math.ceil(countries.length / 12)
   
   const pagesNumbers = Array.from({length: pagesNumber}, (_, index) => index + 1)
 
-  useEffect(() => {
-   async function loadCountries() {
-       const loadedCountries = await getCountries()
-       setCountries(loadedCountries)
+  
+  async function loadCountries() {
+    setIsLoading(true)
+    setErrorMessage(null)
+
+    try{
+      const loadedCountries = await getCountries()
+      setCountries(loadedCountries)
+    } catch (error) {
+        setErrorMessage("Could not load countries. Check your connection and try again")
+    } finally {
+        setIsLoading(false)
+       }
     }
-    loadCountries()
+
+
+  useEffect(() => {
+      loadCountries()
   },[])
+
+  if(isLoading) {
+    return <p>Loading countries...</p>
+  }
+
+  if(errorMessage) {
+    return (
+      <div role='alert'>
+        <p>{errorMessage}</p>
+        <button onClick={loadCountries}>Try again</button>
+      </div>
+    )
+  }
 
   return (
     <div>

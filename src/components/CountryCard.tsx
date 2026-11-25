@@ -21,7 +21,9 @@ export function CountryCard({country}: CountryCardProps) {
             <div className={`border-2 ${regionBorderColor[country.region]} h-full p-2.5 flex flex-col gap-3`}>
                             <div className="flex flex-wrap">
                                 {country.flag?.url_svg && (
-                                <img className="w-full aspect-3/2 object-contain bg-paper" src={`${country.flag?.url_svg}`} />
+                                <img 
+                                    alt={`Flag of ${country.names.common}`}
+                                    className="w-full aspect-3/2 object-contain bg-paper" src={`${country.flag?.url_svg}`} />
                                 )}
                                 {!country.flag?.url_svg && (
                                     <p>Flag: not available</p>
