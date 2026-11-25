@@ -13,6 +13,8 @@
     --color-region-Americas: #23674A;
     --color-region-Oceania: #1F6C78;
     --color-region-Antarctic: #4F5F6B;
+
+    --font-sans: "Archivo", sans-serif;
 }
 
 body {
