@@ -11,9 +11,11 @@ function App() {
   const [query, setQuery] = useState<string>("")
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [selectedRegion, setSelectedRegion] = useState<string>("")
+
 
   const filteredList = countries.filter((country) => 
-    country.names.common.toLowerCase().includes(query.toLowerCase()))
+    country.names.common.toLowerCase().includes(query.toLowerCase()) && (selectedRegion === "" || country.region === selectedRegion))
 
   const pagesNumber = Math.ceil(filteredList.length / 12)
   const pagesNumbers = Array.from({length: pagesNumber}, (_, index) => index + 1)
@@ -52,9 +54,17 @@ function App() {
   }
 
   function handleSearchChange(event: React.ChangeEvent<HTMLInputElement>) {
+    
     setQuery(event.target.value)
     setCurrentPage(1)
   }
+
+  function handleRegionChange(event: React.ChangeEvent<HTMLSelectElement>) {
+   setSelectedRegion(event.target.value)
+   setCurrentPage(1)
+  }
+
+  const regionsArr = ["Europe", "Oceania", "Americas", "Africa", "Oceania", "Antarctic", "Asia"] 
 
   return (
     <div className='px-4 sm:px-6 max-w-6xl mx-auto flex flex-col gap-5'>
@@ -62,20 +72,36 @@ function App() {
         <h1 className="text-7xl font-extrabold font-stretch-extra-condensed mt-6 text-paper">Countries</h1>
         <p className='text-subtitle max-w-[46ch]'>Every country and territory, with it's flag, capital, region and population.</p>
       </div>
-      <div className='flex flex-col gap-1'>
-        <label htmlFor='search-input' className='text-paper font-extrabold'>Search by name</label>
-        <input 
-          id="search-input"
-          type='search'
-          placeholder='Romania, Japan, Peru...'
-          className=' bg-paper rounded-xs text-xs py-3 px-4 w-full' 
-          value={query}
-          onChange={handleSearchChange}
-        />
+      
+      <div className='flex items-end gap-4 flex-wrap justify-between'>
+
+        <div className='flex flex-col w-full sm:flex-[0.75]'>
+          <label htmlFor='search-input' className='text-paper font-bold'>Search by name</label>
+          <input 
+            id="search-input"
+            type='search'
+            placeholder='Romania, Japan, Peru...'
+            className=' bg-paper rounded-xs text-xs h-10 px-4' 
+            value={query}
+            onChange={handleSearchChange}
+          />
+        </div>
+
+
+        <div className='flex flex-col w-full sm:flex-[0.25]'>
+          <label htmlFor='Region' className='text-paper font-bold'>Region</label>
+          <select id="Region" value={selectedRegion} onChange={handleRegionChange} className='bg-paper text-xs h-10 px-4'>
+            <option value={""}>All regions</option>
+            {regionsArr.map((region) => (
+              <option id='region' key={region} value={region}>{region}</option>
+            ))}
+          </select>
+        </div>
       </div>
       
       
       <div >
+        {filteredList.length > 0 && (
         <ul className='grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4'>
           {filteredList.slice((currentPage - 1) * 12, currentPage * 12).map((country, index) => (
             <li 
@@ -86,11 +112,17 @@ function App() {
             </li>
           ))}
       </ul>
+      )}
+      {filteredList.length === 0 && (
+        <p>{`There are no results for "${query}"${selectedRegion === "" ? ", try searching for a different country." : ` in ${selectedRegion}, try searching for a different country or changing the region.`}`}</p>
+      )}
       </div>
-      <div className='flex flex-wrap gap-2'>
-        {pagesNumbers.map((number) => (
-          <PagesButton key={number} number={number} onPageChange={setCurrentPage}/>
-        ))}
+      <div className='flex justify-center'>
+        <nav aria-label='Countries list pages' className='flex flex-wrap gap-2'>
+          {pagesNumbers.map((number) => (
+            <PagesButton key={number} number={number} currentPage={currentPage} onPageChange={setCurrentPage}/>
+          ))}
+        </nav>
     </div>
     </div>
   )
