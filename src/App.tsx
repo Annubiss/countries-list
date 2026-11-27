@@ -66,6 +66,12 @@ function App() {
 
   const regionsArr = ["Europe", "Oceania", "Americas", "Africa", "Oceania", "Antarctic", "Asia"] 
 
+  const VISIBLE_PAGE_BUTTONS = 5
+
+  const lastPossibleStart = Math.max(0, pagesNumber - VISIBLE_PAGE_BUTTONS)
+  const pagesStartNumber = Math.min(Math.max(currentPage - 3, 0), lastPossibleStart)
+  const pagesEndNumber = pagesStartNumber + VISIBLE_PAGE_BUTTONS
+
   return (
     <div className='px-4 sm:px-6 max-w-6xl mx-auto flex flex-col gap-5'>
       <div className='flex flex-col gap-2'>
@@ -118,10 +124,12 @@ function App() {
       )}
       </div>
       <div className='flex justify-center'>
+        <button>Previous</button>
         <nav aria-label='Countries list pages' className='flex flex-wrap gap-2'>
-          {pagesNumbers.map((number) => (
+          {pagesNumbers.slice(pagesStartNumber, pagesEndNumber).map((number) => (
             <PagesButton key={number} number={number} currentPage={currentPage} onPageChange={setCurrentPage}/>
           ))}
+        <button>Next</button>
         </nav>
     </div>
     </div>
