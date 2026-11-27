@@ -4,6 +4,7 @@ import { getCountries } from './api/countries'
 import type { Country } from './types/country'
 import { CountryCard } from './components/CountryCard'
 import { PagesButton } from './components/PagesButton'
+import { Pagination } from './components/Pagination'
 
 function App() {
   const [countries, setCountries] = useState<Country[]>([])
@@ -17,8 +18,7 @@ function App() {
   const filteredList = countries.filter((country) => 
     country.names.common.toLowerCase().includes(query.toLowerCase()) && (selectedRegion === "" || country.region === selectedRegion))
 
-  const pagesNumber = Math.ceil(filteredList.length / 12)
-  const pagesNumbers = Array.from({length: pagesNumber}, (_, index) => index + 1)
+  
 
   
   async function loadCountries() {
@@ -66,11 +66,8 @@ function App() {
 
   const regionsArr = ["Europe", "Oceania", "Americas", "Africa", "Oceania", "Antarctic", "Asia"] 
 
-  const VISIBLE_PAGE_BUTTONS = 5
 
-  const lastPossibleStart = Math.max(0, pagesNumber - VISIBLE_PAGE_BUTTONS)
-  const pagesStartNumber = Math.min(Math.max(currentPage - 3, 0), lastPossibleStart)
-  const pagesEndNumber = pagesStartNumber + VISIBLE_PAGE_BUTTONS
+ 
 
   return (
     <div className='px-4 sm:px-6 max-w-6xl mx-auto flex flex-col gap-5'>
@@ -123,15 +120,7 @@ function App() {
         <p>{`There are no results for "${query}"${selectedRegion === "" ? ", try searching for a different country." : ` in ${selectedRegion}, try searching for a different country or changing the region.`}`}</p>
       )}
       </div>
-      <div className='flex justify-center'>
-        <button>Previous</button>
-        <nav aria-label='Countries list pages' className='flex flex-wrap gap-2'>
-          {pagesNumbers.slice(pagesStartNumber, pagesEndNumber).map((number) => (
-            <PagesButton key={number} number={number} currentPage={currentPage} onPageChange={setCurrentPage}/>
-          ))}
-        <button>Next</button>
-        </nav>
-    </div>
+      <Pagination setCurrentPage={setCurrentPage} filteredList={filteredList} currentPage={currentPage} />
     </div>
   )
 }
