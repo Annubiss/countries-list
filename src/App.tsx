@@ -3,7 +3,6 @@ import './App.css'
 import { getCountries } from './api/countries'
 import type { Country } from './types/country'
 import { CountryCard } from './components/CountryCard'
-import { PagesButton } from './components/PagesButton'
 import { Pagination } from './components/Pagination'
 
 function App() {
